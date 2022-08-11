@@ -361,7 +361,7 @@ const UserForm = ({
             !data.pword && {
               pword: undefined,
             }),
-          role: data.role.join(","),
+          role: Array.isArray(data.role) ? data.role.join(",") : data.role,
         })
           .then(({ data, error }) => {
             if (data.name) {
@@ -630,7 +630,7 @@ const UserForm = ({
         }}
       />
       <div className={s.btns}>
-        <button className="btn secondary" type="submit" disabled={loading}>
+        <button className="btn secondary add-btn" type="submit" disabled={loading}>
           {edit ? (
             <FaCheck />
           ) : (

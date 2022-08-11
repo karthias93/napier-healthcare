@@ -143,7 +143,9 @@ describe("Incident Preview With Data", () => {
         },
       ],
       templateData: [],
-      irHodAck: [],
+      irHodAck: [{
+        name: 'test'
+      }],
       reqInput: [],
       recordInput: [],
       responseIrInput: [],
@@ -168,13 +170,25 @@ describe("Incident Preview With Data", () => {
       headofDepart: 15,
       actionTakens: [],
       contribFactor: null,
+      userViewList: [
+        {
+          userName: 'John'
+        }
+      ]
     });
 
     const providerProps = {
       user: { id: 10, name: "Test User", department: 3 },
       endpoints: {
         locations: "http://endpoints.com/locations",
-        users: "http://endpoints.com/users",
+        users: {
+          id: 5,
+          action: "users",
+          url: "http://endpoints.com/users",
+          key1: "userViewList",
+          key2: "fullName",
+          key3: null,
+        },
         departments: "http://endpoints.com/departments",
       },
     };
@@ -184,8 +198,30 @@ describe("Incident Preview With Data", () => {
         sequence: "2164 /08/2022 NAP H",
         irHodAck: [],
         deptsLookupMultiselect: '',
-        upload: []
-      }
+        upload: [],
+        notification: [
+          {
+            id: 3,
+            name: 6,
+            dept: 1,
+            notificationDateTime: "2022-02-16T16:23:00.000+05:30",
+          },
+        ],
+        witness: [
+          {
+            witnessName: 'test',
+            witnessDept: 'dept'
+          }
+        ],
+        actionTaken: [
+          {
+            immedActionTaken: 'test',
+            accessTakenBy: 'test',
+            accessDateTime: new Date()
+          }
+        ]
+      },
+      from: "login"
     };
     await customRender(<IrPreview />, { providerProps, routerState });
   });
@@ -196,7 +232,7 @@ describe("Incident Preview With Data", () => {
   });
 
   test("Acknowledge", async () => {
-    const ackBtn = await screen.getByText("Acknowledge");
+    const ackBtn = screen.getByText("Acknowledge");
     await act(async () => {
       await fireEvent.click(ackBtn);
     });
@@ -221,6 +257,37 @@ describe("Incident Preview With Data", () => {
     );
     await act(async () => {
       await fireEvent.click(submitBtn);
+    });
+  });
+  test("Back to Dashboard", async () => {
+    const ackBtn = screen.getByText("Acknowledge");
+    await act(async () => {
+      await fireEvent.click(ackBtn);
+    });
+
+    const textarea = document.querySelector("#portal .modal form textarea");
+    await act(async () => {
+      await userEvent.type(textarea, "Some note");
+    });
+
+    setMockFetch({
+      serverDate: "2022-08-09",
+      serverTime: "17:07:42.621512",
+      remarks: "ir is approved",
+      responseBy: "15",
+      userId: 15,
+      responseOn: "2022-08-02T18:37:15.239+05:30",
+    });
+
+    const submitBtn = document.querySelector(
+      "#portal .modal form button[type='submit']"
+    );
+    await act(async () => {
+      await fireEvent.click(submitBtn);
+    });
+    const backBtn = screen.getByText('Back to Dashboard');
+    await act(async () => {
+      await fireEvent.click(backBtn);
     });
   });
 });

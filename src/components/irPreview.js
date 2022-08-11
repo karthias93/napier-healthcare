@@ -141,7 +141,6 @@ export default function IncidentReporting() {
               })
             );
           }
-
           if (Array.isArray(users?.[endpoints?.users.key1])) {
             const _users = users[endpoints?.users.key1].map((user) => {
               const userDetail = userDetails.find((u) =>
