@@ -1,14 +1,21 @@
 import ReactDOM from "react-dom";
 import IrPreview from "./irPreview";
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { SiteContext, IrDashboardContext } from "../SiteContext";
 import userEvent from "@testing-library/user-event";
 
-const customRender = async (ui, { providerProps, ...renderOptions }) => {
+const customRender = async (ui, { providerProps, routerState = {}, ...renderOptions }) => {
   return await act(async () => {
     await render(
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[
+        {
+          pathname: "/testroute",
+          search: '',
+          hash: '',
+          state: routerState
+        }
+      ]}>
         <SiteContext.Provider value={providerProps}>
           <IrDashboardContext.Provider
             value={{
@@ -19,7 +26,7 @@ const customRender = async (ui, { providerProps, ...renderOptions }) => {
             {ui}
           </IrDashboardContext.Provider>
         </SiteContext.Provider>
-      </BrowserRouter>,
+      </MemoryRouter>,
       renderOptions
     );
   });
@@ -171,7 +178,16 @@ describe("Incident Preview With Data", () => {
         departments: "http://endpoints.com/departments",
       },
     };
-    await customRender(<IrPreview />, { providerProps });
+
+    const routerState = {
+      ir: {
+        sequence: "2164 /08/2022 NAP H",
+        irHodAck: [],
+        deptsLookupMultiselect: '',
+        upload: []
+      }
+    };
+    await customRender(<IrPreview />, { providerProps, routerState });
   });
 
   test("Render Preview", async () => {

@@ -622,7 +622,7 @@ const AcknowledgeForm = ({ ir, onSuccess, closeForm }) => {
         >
           Clear
         </button>
-        <button className="btn wd-100" disabled={!ir || !user}>
+        <button className="btn wd-100" disabled={!ir || !user} type="submit">
           Acknowledge
         </button>
       </section>

@@ -105,6 +105,7 @@ export default function Login() {
         <img src="/asset/logo.jpg" />
         <form
           onSubmit={handleSubmit(async (data) => {
+            
             try {
               if (!new URLSearchParams(location.search).get("tenantId")) {
                 return Prompt({
@@ -114,7 +115,6 @@ export default function Login() {
               }
               setLoading(true);
               let token = sessionStorage.getItem("access-token");
-
               if (!token) {
                 const resp = await fetch(`${defaultEndpoints.token}`, {
                   method: "POST",
@@ -155,7 +155,6 @@ export default function Login() {
                   });
                 }
               }
-
               if (his) {
                 let hisToken = sessionStorage.getItem("HIS-access-token");
 
@@ -183,7 +182,6 @@ export default function Login() {
                       "Could not load HIS API endpoints. Please try again.",
                   });
                 }
-
                 if (!hisToken) {
                   let salt, hash;
                   if (endpoints.getSalt?.url) {

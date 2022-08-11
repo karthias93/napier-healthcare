@@ -102,16 +102,20 @@ const Capa = () => {
         const _parameters = {};
 
         if (users?._embedded.user) {
-          _parameters.users = users._embedded.user.map((user) => ({
-            label: user.name,
-            value: user.id,
-            department: user.department,
-            designation: user.designation,
-            role: user.role
-              .split(",")
-              .map((role) => +role)
-              .filter((item) => item),
-          }));
+          _parameters.users = users._embedded.user.map((user) => {
+            user.role = Array.isArray(user.role)
+                ? user.role
+                : user.role?.split(",") || [];
+            return ({
+              label: user.name,
+              value: user.id,
+              department: user.department,
+              designation: user.designation,
+              role: user.role
+                .map((role) => +role)
+                .filter((item) => item),
+            })
+          });
         }
 
         if (departments?._embedded?.department) {
@@ -258,7 +262,6 @@ const Capa = () => {
           }),
       ])
         .then((resps) => {
-          console.log(resps);
           const _rcaTeam = resps
             .filter((item) => item?.data?.designation)
             .map((item) => item.data);
@@ -1050,6 +1053,7 @@ const RcaTeamMemberForm = ({ edit, onSuccess, parameters, clearForm }) => {
         });
         reset({ userId: "", deptId: "", designation: "" });
       })}
+      data-testid="irTeamMemberForm"
     >
       <Select
         options={parameters.users}

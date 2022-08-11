@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { SiteContext, IrDashboardContext } from "../../SiteContext";
 import { InvestigationContext } from "./InvestigationContext";
@@ -646,10 +646,10 @@ describe("IR Investigation", () => {
     });
 
     //-------------------------------Root Cause
-    const probInput = await screen.getByTestId("problemStatement");
+    const probInput = screen.getByLabelText("Problem Statement");
     userEvent.type(probInput, "Main problem");
 
-    let addCauseForm = await screen.getByTestId("addCauseForm");
+    let addCauseForm = screen.getByTestId("addCauseForm");
     const radio_people = addCauseForm.querySelector(
       "section div label:nth-child(1)"
     );
@@ -673,7 +673,7 @@ describe("IR Investigation", () => {
     });
 
     //-------------------------------Identified root cause test
-    const identifiedRootCauseForm = await screen.getByTestId(
+    const identifiedRootCauseForm = screen.getByTestId(
       "identifiedRootCause"
     );
     const rcaNameInput = identifiedRootCauseForm.querySelector("section input");
@@ -697,7 +697,7 @@ describe("IR Investigation", () => {
     });
 
     //-------------------------------Team member test
-    let teamMemberForm = await screen.getByTestId("irTeamMemberForm");
+    let teamMemberForm = screen.getByTestId("irTeamMemberForm");
     const nameInput = teamMemberForm.querySelector("section input");
 
     userEvent.type(nameInput, "admi{enter}");

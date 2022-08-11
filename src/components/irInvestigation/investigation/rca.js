@@ -270,15 +270,19 @@ const Rca = () => {
         const _parameters = {};
 
         if (users?._embedded.user) {
-          _parameters.users = users._embedded.user.map((user) => ({
-            label: user.name,
-            value: user.id,
-            department: user.department,
-            role: user.role
-              .split(",")
-              .map((role) => +role)
-              .filter((item) => item),
-          }));
+          _parameters.users = users._embedded.user.map((user) => {
+            user.role = Array.isArray(user.role)
+                ? user.role
+                : user.role?.split(",") || [];
+            return ({
+              label: user.name,
+              value: user.id,
+              department: user.department,
+              role: user.role
+                .map((role) => +role)
+                .filter((item) => item),
+            })
+          });
         }
 
         if (departments?._embedded?.department) {
@@ -725,6 +729,7 @@ const AddCauseFrom = ({ edit, setEdit, rcaRootcause, onSuccess, rcas }) => {
         reset({});
         setWhyIds([Math.random().toString(32).substr(-8)]);
       })}
+      data-testid="addCauseForm"
     >
       <CustomRadio
         className={s.customRadio}
@@ -1004,6 +1009,7 @@ const IdentifiedRcaForm = ({ edit, rootCauses, onSuccess, clearForm }) => {
           details: "",
         });
       })}
+      data-testid="identifiedRootCause"
     >
       <Input
         {...register("rootCause", { required: "Field is required" })}
@@ -1159,6 +1165,7 @@ const RcaTeamMemberForm = ({ edit, onSuccess, parameters, clearForm }) => {
         });
         reset({ userId: "", deptId: "", designation: "" });
       })}
+      data-testid="irTeamMemberForm"
     >
       <Select
         options={parameters.users}

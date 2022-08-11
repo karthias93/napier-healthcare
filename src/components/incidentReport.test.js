@@ -5,25 +5,37 @@ import IncidentReport, {
   Notifications,
 } from "./incidentReport";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { SiteContext, IrDashboardContext } from "../SiteContext";
-import userEvent from "@testing-library/user-event";
+import { preventability } from "../config";
 
-const customRender = async (ui, { providerProps, ...renderOptions }) => {
+const customRender = async (ui, { providerProps, renderState, ...renderOptions }) => {
   return await act(async () => {
     await render(
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[
+        renderState
+      ]}>
         <SiteContext.Provider value={providerProps}>
           <IrDashboardContext.Provider
             value={{
               count: {},
-              irScreenDetails: [],
+              irScreenDetails: [
+                {
+                  id: 5,
+                  enableDisable: true,
+                  rulesPeriod: 'day'
+                },
+                {
+                  id: 2,
+                  enableDisable: true
+                }
+              ],
             }}
           >
             {ui}
           </IrDashboardContext.Provider>
         </SiteContext.Provider>
-      </BrowserRouter>,
+      </MemoryRouter>,
       renderOptions
     );
   });
@@ -100,5 +112,105 @@ describe("Incident Report Form", () => {
   test("Set notification", async () => {
     const notified = document.querySelector(".notified");
     expect(notified.textContent).toMatch("NameDepartmentDate");
+  });
+
+  test("incident_Date_Time", async () => {
+    const dateTimeInput = screen.getByLabelText('Incident Date & Time *');
+    await act(async () => {
+      await fireEvent.change(dateTimeInput, {
+        target: { value: "2020-05-12T20:20" },
+      });
+    });
+  });
+
+  test("irForm clear", async () => {
+    const clearBtn = screen.getByText('Clear');
+    await act(async () => {
+      await fireEvent.click(clearBtn);
+    });
+  });
+
+  test("irForm Save", async () => {
+    const saveBtn = screen.getByText('Save');
+    await act(async () => {
+      await fireEvent.click(saveBtn);
+    });
+  });
+
+  test("irForm Submit", async () => {
+    const submitBtn = screen.getByText('Submit');
+    await act(async () => {
+      await fireEvent.click(submitBtn);
+    });
+  });
+
+  test("change patient toggle", async () => {
+    const switchInput = screen.getByTestId('switchInput').querySelector('input');
+    await act(async () => {
+      await fireEvent.click(switchInput);
+      expect(screen.getByLabelText('Complaint Date & Time *')).toBeDefined();
+    });
+  })
+});
+
+describe("Incident Report Form Edit", () => {
+  beforeAll(() => {
+    ReactDOM.createPortal = jest.fn((element, node) => {
+      return element;
+    });
+  });
+  beforeEach(async () => {
+    let portal = document.querySelector("#portal");
+    if (!portal) {
+      portal = document.createElement("div");
+      portal.id = "portal";
+      document.body.appendChild(portal);
+    }
+
+    let prompt = document.querySelector("#prompt");
+    if (!prompt) {
+      const prompt = document.createElement("div");
+      prompt.id = "prompt";
+      document.body.appendChild(prompt);
+    }
+
+    const providerProps = {
+      user: { id: 10, name: "Test User", department: 3 },
+      endpoints: {
+        locations: "http://endpoints.com/locations",
+        users: "http://endpoints.com/users",
+        departments: "http://endpoints.com/departments",
+      },
+    };
+    await customRender(<IncidentReport />, { providerProps, renderState: {
+      state: {
+        edit: {
+          preventability
+        }
+      }
+    }});
+  });
+
+  test("irForm save - edit", async () => {
+    const saveBtn = screen.getByText('Save');
+    await act(async () => {
+      await fireEvent.click(saveBtn);
+    });
+  });
+
+  test("complaIntegerDatetime validate", async () => {
+    const switchInput = screen.getByTestId('switchInput').querySelector('input');
+    await act(async () => {
+      await fireEvent.click(switchInput);
+    });
+    const dateTimeInput = screen.getByLabelText('Complaint Date & Time *');
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+
+    await act(async () => {
+      await fireEvent.change(dateTimeInput, {
+        target: { value: date },
+      });
+    });
   });
 });

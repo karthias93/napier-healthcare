@@ -286,15 +286,19 @@ const IrDetails = () => {
         }
 
         if (users?._embedded.user) {
-          _parameters.users = users._embedded.user.map((user) => ({
-            label: user.name,
-            value: user.id,
-            department: user.department,
-            role: user.role
-              .split(",")
-              .map((role) => +role)
-              .filter((item) => item),
-          }));
+          _parameters.users = users._embedded.user.map((user) => {
+            user.role = Array.isArray(user.role)
+                ? user.role
+                : user.role?.split(",") || [];
+            return ({
+              label: user.name,
+              value: user.id,
+              department: user.department,
+              role: user.role
+                .map((role) => +role)
+                .filter((item) => item),
+            })
+          });
         }
 
         if (departments?._embedded?.department) {
