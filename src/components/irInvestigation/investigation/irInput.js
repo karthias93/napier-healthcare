@@ -533,6 +533,7 @@ const RequestInputForm = ({ edit, onSuccess, previous, parameters }) => {
           })
           .catch((err) => Prompt({ type: "error", message: err.message }));
       })}
+      data-testid="RequestInputForm"
     >
       <Select
         control={control}
@@ -738,6 +739,7 @@ const RecordInputForm = ({ edit, parameters, onSuccess }) => {
           })
           .catch((err) => Prompt({ type: "error", message: err.message }));
       })}
+      data-testid="RecordInputForm"
     >
       <Input
         label="Response From"
@@ -984,7 +986,6 @@ const EvidenceForm = ({
           values.upload = "";
           values.fileName = "";
         }
-
         (edit ? updateEvidence : postEvidence)({
           ...values,
           irId: ir.id,
@@ -1005,6 +1006,7 @@ const EvidenceForm = ({
             Prompt({ type: "error", message: err.message });
           });
       })}
+      data-testid="EvidenceForm"
     >
       <Combobox
         name="eviType"
@@ -1069,6 +1071,7 @@ const EvidenceForm = ({
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="EvidenceFormClose"
           >
             <IoClose />
           </button>

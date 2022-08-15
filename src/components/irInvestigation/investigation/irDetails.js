@@ -285,7 +285,7 @@ const IrDetails = () => {
           );
         }
 
-        if (users?._embedded.user) {
+        if (users?._embedded?.user) {
           _parameters.users = users._embedded.user.map((user) => {
             user.role = Array.isArray(user.role)
                 ? user.role
@@ -745,6 +745,7 @@ const EventForm = ({ edit, onSuccess, clearForm }) => {
         });
         return reset();
       })}
+      data-testid="EventForm"
     >
       <Input
         className={s.detail}
@@ -776,6 +777,7 @@ const EventForm = ({ edit, onSuccess, clearForm }) => {
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="EventFormClose"
           >
             <IoClose />
           </button>
@@ -1031,6 +1033,7 @@ const NoteForm = ({ edit, onSuccess, clearForm }) => {
         //   })
         //   .catch((err) => Prompt({ type: "error", message: err.message }));
       })}
+      data-testid="NoteForm"
     >
       <Input
         {...register("notes", { required: "Please enter Detail" })}
@@ -1061,6 +1064,7 @@ const NoteForm = ({ edit, onSuccess, clearForm }) => {
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="NoteFormClose"
           >
             <IoClose />
           </button>
@@ -1101,7 +1105,7 @@ const SimilarIncidents = ({ similarIncidents }) => {
     },
   ]);
   return (
-    <div className={s.similarIncidents}>
+    <div className={s.similarIncidents} data-testid="SimilarIncidents">
       <Tabs
         secondary
         tabs={[

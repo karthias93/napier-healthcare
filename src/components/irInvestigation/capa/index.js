@@ -299,7 +299,7 @@ const Capa = () => {
   }, [ir.rcaTeam]);
 
   return (
-    <div className={s.mainContainer}>
+    <div className={s.mainContainer} data-testid="capa">
       <Box collapsable label="POTENTIAL PROBLEM AREAS">
         <ProblemAreas
           events={[
@@ -805,7 +805,7 @@ const MonitoringPlanModal = ({ plan, parameters, onSuccess }) => {
 
         <div className={s.btns}>
           <button
-            className="btn secondary wd-100"
+            className="btn secondary wd-100 clear-btn"
             type="button"
             onClick={() => reset()}
           >
@@ -858,6 +858,7 @@ const PreventiveActionPlansForm = ({
           status: "",
         });
       })}
+      data-testid="PreventiveActionPlansForm"
     >
       <Input
         {...register("actionPlan", { required: "Field is required" })}
@@ -928,6 +929,7 @@ const PreventiveActionPlansForm = ({
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="PreventiveActionPlansFormClose"
           >
             <IoClose />
           </button>
@@ -1097,6 +1099,7 @@ const RcaTeamMemberForm = ({ edit, onSuccess, parameters, clearForm }) => {
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="irTeamMemberFormClose"
           >
             <IoClose />
           </button>

@@ -1,14 +1,20 @@
 import ReactDOM from "react-dom";
 import CapaDashboard from "./capaDashboard";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { SiteContext, IrDashboardContext } from "../SiteContext";
 import userEvent from "@testing-library/user-event";
 
 const customRender = async (ui, { providerProps, ...renderOptions }) => {
   return await act(async () => {
     await render(
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[
+        {
+          search: {
+            status: 1
+          }
+        }
+      ]}>
         <SiteContext.Provider value={providerProps}>
           <IrDashboardContext.Provider
             value={{
@@ -68,7 +74,7 @@ const customRender = async (ui, { providerProps, ...renderOptions }) => {
             {ui}
           </IrDashboardContext.Provider>
         </SiteContext.Provider>
-      </BrowserRouter>,
+      </MemoryRouter>,
       renderOptions
     );
   });
@@ -482,7 +488,9 @@ describe("Capa dashboard", () => {
     }
 
     const providerProps = {
-      irTypes: [],
+      irTypes: [
+        {label: 'test', value: 'test'}
+      ],
       user: {
         id: 10,
         name: "Test User",
@@ -510,7 +518,7 @@ describe("Capa dashboard", () => {
     await act(async () => {
       await fireEvent.click(expandBtn);
     });
-
+    
     const clearBtn = await screen.getByText("Clear");
     await act(async () => {
       await fireEvent.click(clearBtn);
@@ -524,5 +532,16 @@ describe("Capa dashboard", () => {
     await act(async () => {
       await fireEvent.click(expandBtn);
     });
+  });
+
+  test('change tabs', async () => {
+    const showBtn = document.querySelector('.show-plans-btn');
+    fireEvent.click(showBtn);
+    await act(async () => {
+      const tabs = screen.getAllByTestId('tabs')[0];
+      const link = tabs.querySelector('a');
+      fireEvent.click(link);
+    });
+    
   });
 });

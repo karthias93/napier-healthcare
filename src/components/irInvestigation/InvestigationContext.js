@@ -71,7 +71,7 @@ export const InvestigationProvider = ({ children }) => {
       if (data) {
         setIr({
           ...data,
-          ...(data.irInvestigation.length && {
+          ...(data.irInvestigation?.length && {
             irInvestigation: [
               {
                 ...data.irInvestigation[0],

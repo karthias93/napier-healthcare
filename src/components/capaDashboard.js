@@ -375,7 +375,7 @@ const SingleIr = memo(
       >
         <td>
           <button
-            className={`btn clear ${s.expandBtn}`}
+            className={`btn clear ${s.expandBtn} show-plans-btn`}
             onClick={() => setShowPlans(!showPlans)}
           >
             {showPlans ? <FaMinusSquare /> : <FaPlusSquare />}

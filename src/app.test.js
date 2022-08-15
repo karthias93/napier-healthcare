@@ -327,8 +327,16 @@ test("Site Context Provider", () => {
     </BrowserRouter>
   );
 });
+
 test("IR Dashboard Context Provider", async () => {
   setMockFetch(mockData);
+  await customRender(<IrDashboardContextProvider />, {
+    user: { id: 10, name: "Test User", role: ["irAdmin"] },
+  });
+});
+
+test("IR Dashboard Context Provider - Fail", async () => {
+  setMockFailFetch();
   await customRender(<IrDashboardContextProvider />, {
     user: { id: 10, name: "Test User", role: ["irAdmin"] },
   });

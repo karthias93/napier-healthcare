@@ -70,20 +70,20 @@ const IrInvestigation = () => {
               status: 1,
             },
           })) ||
-          null,
+          {},
       ],
       getUsersWithRoles(),
-      ...[(endpoints?.patients?.url && getAllPatients()) || null],
+      ...[(endpoints?.patients?.url && getAllPatients()) || {}],
       getCategories(),
     ])
       .then(
         ([
-          location,
-          departments,
-          users,
-          usersWithRoles,
-          patients,
-          categories,
+          { data: location },
+          { data: departments },
+          { data: users },
+          { data: usersWithRoles },
+          { data: patients },
+          { data: categories },
         ]) => {
           const _parameters = {};
           const userDetails = (usersWithRoles?._embedded?.user || []).map(
@@ -94,7 +94,6 @@ const IrInvestigation = () => {
               return user;
             }
           );
-
           if (Array.isArray(location)) {
             _parameters.locations = location
               .filter((item) => +item.status)
@@ -140,7 +139,7 @@ const IrInvestigation = () => {
               if (userDetail) {
                 user.id = userDetail.id;
                 user.role = userDetail.role;
-                user.department = userDetail.department.toString();
+                user.department = userDetail.department?.toString();
               }
               return user;
             });
@@ -204,14 +203,12 @@ const IrInvestigation = () => {
               department: item.department,
             }));
           }
-
           if (Array.isArray(patients)) {
             _parameters.patients = patients.map((patient) => ({
               value: patient.uhid,
               label: patient.name,
             }));
           }
-
           if (categories?._embedded?.category) {
             _parameters.categories = categories?._embedded?.category;
           }
@@ -271,7 +268,7 @@ const IrInvestigation = () => {
           label="Reporting Department"
           value={
             parameters?.departments?.find(
-              (dept) => dept.value.toString() === ir?.department?.toString()
+              (dept) => dept?.value?.toString() === ir?.department?.toString()
             )?.label || ir?.department
           }
         />

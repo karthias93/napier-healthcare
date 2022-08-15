@@ -26,9 +26,9 @@ export const Provider = ({ children }) => {
     ({ roleId, permission }) => {
       let roleMatch = false;
       if (Array.isArray(roleId)) {
-        roleMatch = user.role.some((ur) => roleId.includes(ur));
+        roleMatch = user?.role.some((ur) => roleId.includes(ur));
       } else {
-        roleMatch = user.role.includes(roleId);
+        roleMatch = user?.role.includes(roleId);
       }
       if (roleMatch && !permission) {
         return true;

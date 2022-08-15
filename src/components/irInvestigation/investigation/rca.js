@@ -278,6 +278,7 @@ const Rca = () => {
               label: user.name,
               value: user.id,
               department: user.department,
+              designation: user.designation,
               role: user.role
                 .map((role) => +role)
                 .filter((item) => item),
@@ -749,7 +750,6 @@ const AddCauseFrom = ({ edit, setEdit, rcaRootcause, onSuccess, rcas }) => {
         }))}
         error={errors.type}
       />
-
       <div className={s.addCause}>
         <Select
           label="Cause"
@@ -1040,6 +1040,7 @@ const IdentifiedRcaForm = ({ edit, rootCauses, onSuccess, clearForm }) => {
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="identifiedRootCauseClose"
           >
             <IoClose />
           </button>
@@ -1209,6 +1210,7 @@ const RcaTeamMemberForm = ({ edit, onSuccess, parameters, clearForm }) => {
             type="button"
             onClick={() => clearForm(null)}
             className="btn secondary"
+            data-testid="irTeamMemberFormClose"
           >
             <IoClose />
           </button>

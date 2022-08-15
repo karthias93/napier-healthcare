@@ -191,17 +191,17 @@ describe("Main Configuration", () => {
   });
 
   test("Main Render", async () => {
-    const comp = await screen.getByTestId("mainConfig");
+    const comp = screen.getByTestId("mainConfig");
     expect(comp.textContent).toMatch("INCIDENT REPORTING");
 
-    const thanksCheckbox = await screen.getByText(
+    const thanksCheckbox = screen.getByText(
       "Send thank you notification for Self-Reporting IR"
     );
     await act(async () => {
       await fireEvent.click(thanksCheckbox);
     });
 
-    const allToggle = await screen.getAllByTestId("toggleInput");
+    const allToggle = screen.getAllByTestId("toggleInput");
     await act(async () => {
       await fireEvent.click(allToggle[0]);
     });
@@ -221,7 +221,7 @@ describe("Main Configuration", () => {
       await fireEvent.click(allToggle[5]);
     });
 
-    const allSaves = await screen.getAllByText("Save");
+    const allSaves = screen.getAllByText("Save");
     await act(async () => {
       await fireEvent.click(allSaves[0]);
     });
@@ -267,6 +267,16 @@ describe("Main Configuration", () => {
     await act(async () => {
       await fireEvent.click(ele);
     });
+  });
+
+  test('IrInvestigationDetails', async () => {
+    const irInvestigationDetail = document.querySelector('.irInvestigationDetail');
+    const toggleInputs = irInvestigationDetail.querySelectorAll('input[type="checkbox"]');
+    for (let i=0; i<9; i++) {
+      await act(async () => {
+        await fireEvent.change(toggleInputs[i]);
+      });
+    }
   });
 });
 

@@ -51,5 +51,15 @@
   },
   "devDependencies": {
     "react-error-overlay": "^6.0.9"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+        "./src/reportWebVitals.js",
+        "./src/config/mocks/*",
+        "./src/config/hisEndpoints.js",
+        "./src/components/irConfig/mainConfiguration.js",
+        "./src/helpers/index.js",
+        "./src/hooks/index.js"
+    ]
   }
 }

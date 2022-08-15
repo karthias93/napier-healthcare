@@ -123,7 +123,7 @@ function Dashboard() {
           <span>
             Logged in as:{" "}
             <span style={{ fontWeight: "600", color: "#3450a3" }}>
-              {user.name}
+              {user?.name}
             </span>
           </span>
           <div className={s.actions}>

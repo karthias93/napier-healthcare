@@ -182,8 +182,8 @@ export default function IncidentReporting() {
     methods.reset({
       ...defaultFormValues,
       incident_Date_Time: "",
-      userId: user.id,
-      department: user.department,
+      userId: user?.id,
+      department: user?.department,
       headofDepart:
         parameters?.hods?.length === 1 ? parameters.hods[0].value : "",
     });
@@ -297,7 +297,6 @@ export default function IncidentReporting() {
               return user;
             }
           );
-
           if (Array.isArray(location.data)) {
             _parameters.locations = location.data
               .filter((item) => +item.status)
@@ -677,7 +676,7 @@ export default function IncidentReporting() {
                   />
                 </>
               )}
-              <button style={{ display: "none" }}>submit</button>
+              <button style={{ display: "none" }} className="incident-details-submit">submit</button>
             </form>
           </Box>
           <Box label="TYPE OF INCIDENT *" collapsable={true}>
@@ -884,7 +883,7 @@ export default function IncidentReporting() {
                 methods.setValue("status", 1);
                 methods.clearErrors();
               }}
-              className="btn secondary wd-100"
+              className="btn secondary wd-100 ir-form-save"
               disabled={loading || uploadingFiles || readOnly || anonymous}
             >
               Save
@@ -893,7 +892,7 @@ export default function IncidentReporting() {
               onClick={() => {
                 methods.setValue("status", 2);
               }}
-              className="btn wd-100"
+              className="btn wd-100 ir-form-submit"
               disabled={loading || uploadingFiles || readOnly}
             >
               Submit

@@ -167,8 +167,46 @@ const setMockFetch = (data, status) => {
   });
 };
 const setMockFailFetch = () => {
-  jest.spyOn(global, "fetch").mockResolvedValue();
+  jest.spyOn(global, "fetch").mockRejectedValue(new Error('Invalid Token'));
 };
+
+const location = [
+  {
+    id: 2,
+    code: 0,
+    name: "KIMS2",
+    locationType: 12,
+    status: true,
+  },
+  {
+    id: 5,
+    code: 0,
+    name: "KIMS3",
+    locationType: 2,
+    status: true,
+  },
+  {
+    id: 6,
+    code: 0,
+    name: "Star1A",
+    locationType: 2,
+    status: true,
+  },
+  {
+    id: 7,
+    code: 0,
+    name: "Star2",
+    locationType: 10,
+    status: true,
+  },
+];
+
+const patients = [
+  {
+    uhid: 1,
+    name: 'test'
+  }
+];
 
 const data = {
   _embedded: {
@@ -306,36 +344,7 @@ const data = {
       { id: 4, name: "lab" },
       { id: 5, name: "aa" },
     ],
-    location: [
-      {
-        id: 2,
-        code: 0,
-        name: "KIMS2",
-        locationType: 12,
-        status: true,
-      },
-      {
-        id: 5,
-        code: 0,
-        name: "KIMS3",
-        locationType: 2,
-        status: true,
-      },
-      {
-        id: 6,
-        code: 0,
-        name: "Star1A",
-        locationType: 2,
-        status: true,
-      },
-      {
-        id: 7,
-        code: 0,
-        name: "Star2",
-        locationType: 10,
-        status: true,
-      },
-    ],
+    location,
     rca: [
       {
         id: 3,
@@ -431,6 +440,134 @@ const data = {
         rcaCauses: [],
       },
     ],
+    category: [
+      {
+        id: 1,
+        name: "Medication Errors",
+        subCategorys: [
+          {
+            id: 1,
+            name: "Other",
+            template: 0,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+          {
+            id: 6,
+            name: "Sub Cat1",
+            template: 1,
+            sentinel: false,
+            reportStatus: true,
+            status: true,
+            reportable: [
+              {
+                id: 1,
+                reporting_instructions: "this is the report",
+                report_to: 6,
+              },
+            ],
+          },
+          {
+            id: 4,
+            name: "cat 1 sub 3",
+            template: 21,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "Medical",
+        subCategorys: [
+          {
+            id: 2,
+            name: "Other",
+            template: 0,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+          {
+            id: 5,
+            name: "sub2",
+            template: 43,
+            sentinel: true,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+          {
+            id: 3,
+            name: "subb1",
+            template: 2434,
+            sentinel: false,
+            reportStatus: true,
+            status: true,
+            reportable: [],
+          },
+          {
+            id: 7,
+            name: "asdasdg",
+            template: 2323,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: "Test",
+        subCategorys: [
+          {
+            id: 8,
+            name: "Other",
+            template: 32,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+        ],
+      },
+      {
+        id: 4,
+        name: "New Category",
+        subCategorys: [
+          {
+            id: 9,
+            name: "New1",
+            template: 1,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+        ],
+      },
+      {
+        id: 5,
+        name: "asdg asdg",
+        subCategorys: [
+          {
+            id: 10,
+            name: "asd gha",
+            template: 232,
+            sentinel: false,
+            reportStatus: false,
+            status: true,
+            reportable: [],
+          },
+        ],
+      },
+    ]
   },
   id: 24979,
   actionTaken: [],
@@ -579,6 +716,32 @@ const data = {
   headofDepart: 15,
   actionTakens: [],
   contribFactor: null,
+  userDetails: [
+    {userName: 'admin'}
+  ]
+};
+
+const providerProps = {
+  irTypes: [
+    {label: 'test', value: 'test'}
+  ],
+  user: { id: 10, name: "Test User", role: "1,2,4,7,9" },
+  endpoints: {
+    locations: "http://endpoints.com/locations",
+    users: {
+      url: "http://endpoints.com/users",
+      key1: "userDetails"
+    },
+    departments: {
+      url: "http://endpoints.com/departments",
+      key1: "test"
+    },
+    patients: {
+      url: "http://endpoints.com/patients"
+    },
+    searchIrs: "http://endpoints.com/searchIrs",
+  },
+  checkPermission: () => true,
 };
 
 describe("IR Investigation", () => {
@@ -601,19 +764,12 @@ describe("IR Investigation", () => {
       prompt.id = "prompt";
       document.body.appendChild(prompt);
     }
-
-    const providerProps = {
-      irTypes: [],
-      user: { id: 10, name: "Test User", role: "1,2,4,7,9" },
-      endpoints: {
-        locations: "http://endpoints.com/locations",
-        users: "http://endpoints.com/users",
-        departments: "http://endpoints.com/departments",
-        searchIrs: "http://endpoints.com/searchIrs",
-      },
-      checkPermission: () => true,
-    };
     setMockFetch(data);
+    await customRender(<IrInvestigation />, { providerProps });
+  });
+
+  test('fetch fail', async () => {
+    setMockFailFetch();
     await customRender(<IrInvestigation />, { providerProps });
   });
 
@@ -933,5 +1089,21 @@ describe("IR Investigation", () => {
     await act(async () => {
       await fireEvent.click(submitBtn);
     });
+  });
+
+  test('location data - fetch', async () => {
+    setMockFetch(location);
+    await customRender(<IrInvestigation />, { providerProps });
+  });
+
+  test('patients data - fetch', async () => {
+    setMockFetch(patients);
+    await customRender(<IrInvestigation />, { providerProps });
+  });
+
+  test('without user details', async () => {
+    delete data.userDetails;
+    setMockFetch(data);
+    await customRender(<IrInvestigation />, { providerProps });
   });
 });

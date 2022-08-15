@@ -1363,15 +1363,15 @@ const IrInvestigationDetails = () => {
               checked={
                 elements.find((el) => el.elements === 1)?.enable || false
               }
-              onChange={() =>
-                setElements((prev) =>
-                  prev.map((item) =>
+              onChange={() => {
+                return setElements((prev) => {
+                  return prev.map((item) =>
                     item.elements === 1
                       ? { ...item, enable: !item.enable }
                       : item
                   )
-                )
-              }
+                })
+              }}
             />
           </section>
         </section>
